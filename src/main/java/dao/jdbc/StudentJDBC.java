@@ -14,7 +14,7 @@ public class StudentJDBC implements StudentDAO {
     public StudentJDBC(Connection connection, boolean test) throws SQLException {
         this.connection = connection;
         if (test) {
-            connection.setAutoCommit(false);
+            connection.setAutoCommit(true);
         }
     }
 
@@ -26,6 +26,7 @@ public class StudentJDBC implements StudentDAO {
             insert.setString(2, student.getLastName());
             insert.setString(3, student.getEmail());
             int rows = insert.executeUpdate();
+            //connection.commit();
             System.out.println("Dodano studenta (wierszy: " + rows + ").");
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -157,7 +158,7 @@ public class StudentJDBC implements StudentDAO {
         String sql =
                 "SELECT c.id, c.name " +
                         "FROM courses c " +
-                        "JOIN students e ON e.course_id = c.id " +
+                        "JOIN students e ON e.id = c.id " +
                         "WHERE e.id = ?";
 
         List<Course> courses = new ArrayList<>();
